@@ -16,8 +16,7 @@ public class CitizenService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void registerCitizen(Citizen citizen) {
-        // Encrypt the password using BCrypt
+    public void save(Citizen citizen) {
         citizen.setPassword(passwordEncoder.encode(citizen.getPassword()));
         citizenRepository.save(citizen);
     }

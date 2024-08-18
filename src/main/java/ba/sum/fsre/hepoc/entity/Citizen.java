@@ -12,10 +12,10 @@ public class Citizen {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "first_name")
     private String firstName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name ="last_name")
     private String lastName;
 
     @Column(nullable = false, unique = true)
@@ -27,7 +27,7 @@ public class Citizen {
     @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "phone_number")
     private String phoneNumber;
 
     @Column(nullable = false)
@@ -36,10 +36,10 @@ public class Citizen {
     @Column(nullable = false)
     private String city;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "date_of_birth")
     private String dateOfBirth;
 
-    @Column
+    @Column(name = "has_voted")
     private boolean hasVoted;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)

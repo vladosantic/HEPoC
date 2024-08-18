@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Citizen Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+</head>
+<body>
+<div class="container">
+    <!-- Top Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+        <a class="navbar-brand" href="#">Voting System</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <span class="navbar-text" th:text="'Full name:' + ${citizen.firstName} + ' ' + ${citizen.lastName} + '| '"></span>
+                </li>
+                <li class="nav-item">
+                    <span class="navbar-text" th:text="'JMBG: ' + ${citizen.jmbg} + '| '"></span>
+                </li>
+                <li class="nav-item">
+                    <span class="navbar-text" th:text="'Email: ' + ${citizen.email} + '| '"></span>
+                </li>
+                <li class="nav-item">
+                    <span class="navbar-text" th:text="'Voting Status: ' + (${citizen.hasVoted} ? 'Voted' : 'Not Voted')"></span>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="row">
+        <div class="col">
+            <h2>Welcome, <span th:text="${citizen.firstName} + ' ' + ${citizen.lastName}"></span></h2>
+            <p>Here you can manage your voting activities.</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

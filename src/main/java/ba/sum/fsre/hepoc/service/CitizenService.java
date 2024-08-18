@@ -5,6 +5,8 @@ import ba.sum.fsre.hepoc.repository.CitizenRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class CitizenService {
     private final CitizenRepository citizenRepository;
@@ -19,5 +21,9 @@ public class CitizenService {
     public void save(Citizen citizen) {
         citizen.setPassword(passwordEncoder.encode(citizen.getPassword()));
         citizenRepository.save(citizen);
+    }
+
+    public Optional<Citizen> findByJmbg(String jmbg) {
+        return citizenRepository.findByJmbg(jmbg);
     }
 }

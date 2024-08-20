@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Voting</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+</head>
+<body>
+<div class="container mt-3">
+    <h1 class="mb-3" th:text="${election.name}">Election Name</h1>
+    <p>From: <span th:text="${#dates.format(election.startDate, 'dd/MM/yyyy')}"></span></p>
+    <p>To: <span th:text="${#dates.format(election.endDate, 'dd/MM/yyyy')}"></span></p>
+
+    <h3>Candidates</h3>
+    <form th:action="@{/submitVote}" method="post">
+        <input type="hidden" th:value="${election.id}" name="electionId"/>
+        <div class="list-group">
+            <div class="list-group-item" th:each="candidate : ${candidates}">
+                <input type="radio" th:value="${candidate.id}" th:name="'candidateId'"/>
+                <span th:text="${candidate.name} + ' ' + ${candidate.lastName} + ', representing ' + ${candidate.party}"></span>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Submit Vote</button>
+    </form>
+</div>
+</body>
+</html>

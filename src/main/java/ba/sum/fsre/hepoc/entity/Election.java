@@ -19,6 +19,11 @@ public class Election {
     @Column(nullable = false)
     private Date endDate;
 
+    public boolean isCurrent() {
+        Date now = new Date();
+        return !now.before(startDate) && !now.after(endDate);
+    }
+
     public Integer getId() {
         return id;
     }

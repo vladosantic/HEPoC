@@ -17,7 +17,7 @@ public class Vote {
     @JoinColumn(name = "election_id", nullable = false)
     private Election election;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String encryptedVote;
 
     public Integer getId() {

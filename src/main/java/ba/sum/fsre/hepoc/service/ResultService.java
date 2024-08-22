@@ -6,6 +6,10 @@ import com.n1analytics.paillier.EncryptedNumber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class ResultService {
     @Autowired
@@ -45,5 +49,18 @@ public class ResultService {
         result.setEncryptedTally(newTallyString);
 
         resultRepository.save(result);
+    }
+
+    public Map<Integer, Long> getElectionResults(Integer electionId) {
+        List<Result> results = resultRepository.findAllByElectionId(electionId);
+        Map<Integer, Long> tallyMap = new HashMap<>();
+
+        for (Result result : results) {
+            EncryptedNumber encryptedNumber = encryptionService.encryptedTextToEncryptedNumber(result.getEncryptedTally());
+            long decryptedTally = encryptionService.decrypt(encryptedNumber);
+            tallyMap.put(result.getCandidateId(), decryptedTally);
+        }
+
+        return tallyMap;
     }
 }

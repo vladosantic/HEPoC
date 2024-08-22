@@ -47,9 +47,18 @@ public class CitizenController {
         return "index";
     }
 
+    @GetMapping("/")
+    public String redirectToIndexPage(Model model, Principal principal) {
+        String jmbg = principal.getName();
+        Citizen citizen = citizenService.findByJmbg(jmbg)
+                .orElseThrow(() -> new UsernameNotFoundException("Citizen not found with JMBG: " + jmbg));
+        model.addAttribute("citizen", citizen);
+        return "index";
+    }
+
     @PostMapping("/register")
     public String processRegistration(@ModelAttribute Citizen citizen) {
-        citizenService.save(citizen);
+        citizenService.register(citizen);
         return "redirect:/login";
     }
 }

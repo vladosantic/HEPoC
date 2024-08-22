@@ -49,6 +49,7 @@ public class ElectionController {
 
         model.addAttribute("currentElections", currentElections);
         model.addAttribute("expiredElections", expiredElections);
+        model.addAttribute("citizen", citizen);
 
         return "elections";
     }

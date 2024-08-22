@@ -19,6 +19,10 @@ public class CitizenService {
     }
 
     public void save(Citizen citizen) {
+        citizenRepository.save(citizen);
+    }
+
+    public void register (Citizen citizen) {
         citizen.setPassword(passwordEncoder.encode(citizen.getPassword()));
         citizenRepository.save(citizen);
     }

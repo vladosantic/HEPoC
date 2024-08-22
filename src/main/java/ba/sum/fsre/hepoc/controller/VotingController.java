@@ -78,15 +78,22 @@ public class VotingController {
         vote.setCitizen(citizen);
         // Encrypt the candidate id
         vote.setEncryptedVote(encryptionService.encryptNumberToString(candidateId));
-        votingService.saveVote(vote);
+        if (!citizen.isHasVoted()) {
+            votingService.saveVote(vote);
+            // Add the encrypted vote to the tally for the selected candidate and election
+            resultService.addVote(candidateId, electionId, encryptionService.encryptNumberToString(1));
 
-        // Add the encrypted vote to the tally for the selected candidate and election
-        System.out.println(candidateId);
-        System.out.println(electionId);
-        resultService.addVote(candidateId, electionId, encryptionService.encryptNumberToString(1));
+            citizen.setHasVoted(true);
+            citizenService.save(citizen);
 
-        // Redirect to a success page or show a success message
-        model.addAttribute("message", "Vote submitted successfully!");
-        return "voteConfirmation";
+            // Redirect to a success page or show a success message
+            model.addAttribute("message", "Vote submitted successfully!");
+        } else {
+            model.addAttribute("errorMessage", "You have already submitted your vote!");
+        }
+
+        model.addAttribute("citizen", citizen);
+
+        return "index";
     }
 }

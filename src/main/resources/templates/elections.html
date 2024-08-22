@@ -68,7 +68,7 @@
                         <p class="card-text">From: <span th:text="${#dates.format(election.startDate, 'dd/MM/yyyy')}"></span></p>
                         <p class="card-text">To: <span th:text="${#dates.format(election.endDate, 'dd/MM/yyyy')}"></span></p>
 
-                        <a th:href="@{/results/{id}(id=${election.id})}" class="btn btn-secondary">Show Results</a>
+                        <a th:href="@{/election/results/{id} (id=${election.id})}" class="btn btn-secondary">Show Results</a>
                     </div>
                 </div>
             </div>

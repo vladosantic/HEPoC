@@ -78,7 +78,7 @@ public class EncryptionService {
 
 
     public long decrypt(EncryptedNumber encryptedNumber) {
-        return privateKey.decrypt(encryptedNumber).decodeLong();
+        return privateKey.decrypt(encryptedNumber).getValue().longValue();
     }
 
     public EncryptedNumber encryptedTextToEncryptedNumber(String encodedString) {

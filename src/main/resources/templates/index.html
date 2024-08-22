@@ -47,16 +47,37 @@
             </h2>
         </div>
     </div>
+
     <div class="lc-block col-lg-6 mx-auto mb-4">
-        <div editable="rich">
-            <p class="lead ">Here, you can vote quickly and securely using modern technology.
+        <div th:if="${citizen.hasVoted}" editable="rich">
+            <p class="lead">Thank you for voting. Your participation in the democratic process is valuable!</p>
+        </div>
+
+        <div th:unless="${citizen.hasVoted}" editable="rich">
+            <p class="lead">Here, you can vote quickly and securely using modern technology.
                 Our platform ensures high standards of data protection and privacy, making it easy and safe to participate in elections.
                 Start your voting process today and be part of the democratic decision-making.</p>
         </div>
     </div>
 
-    <div class="lc-block d-grid gap-2 d-sm-flex justify-content-sm-center"> <a class="btn btn-primary btn-lg px-4 gap-3" href="/elections" role="button">
-        Click here to see all available elections.</a>
+    <div th:if="${message != null}" class="lc-block col-lg-6 mx-auto mb-4">
+        <div class="alert alert-success" th:text="${message}"></div>
+    </div>
+
+    <div th:if="${errorMessage != null}" class="lc-block col-lg-6 mx-auto mb-4">
+        <div class="alert alert-danger" th:text="${errorMessage}"></div>
+    </div>
+
+    <div class="lc-block d-grid gap-2 d-sm-flex justify-content-sm-center">
+        <a th:if="${citizen.hasVoted}"  class="btn btn-primary btn-lg px-4 gap-3" href="/elections" role="button">
+            Click here to see results of elections.
+        </a>
+    </div>
+
+    <div class="lc-block d-grid gap-2 d-sm-flex justify-content-sm-center">
+        <a th:unless="${citizen.hasVoted}"  class="btn btn-primary btn-lg px-4 gap-3" href="/elections" role="button">
+            Click here to see all available elections.
+        </a>
     </div>
 </div>
 

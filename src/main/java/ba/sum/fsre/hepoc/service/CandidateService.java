@@ -20,4 +20,8 @@ public class CandidateService {
     public List<Candidate> findAllFromElection (Election election) {
         return candidateRepository.findAllByElection(election);
     }
+
+    public Candidate findCandidateById (Integer id) {
+        return candidateRepository.findCandidateById(id);
+    }
 }

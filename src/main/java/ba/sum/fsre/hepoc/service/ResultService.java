@@ -1,5 +1,6 @@
 package ba.sum.fsre.hepoc.service;
 
+import ba.sum.fsre.hepoc.entity.Candidate;
 import ba.sum.fsre.hepoc.repository.ResultRepository;
 import ba.sum.fsre.hepoc.entity.Result;
 import com.n1analytics.paillier.EncryptedNumber;
@@ -18,9 +19,13 @@ public class ResultService {
     @Autowired
     private final EncryptionService encryptionService;
 
-    public ResultService(ResultRepository resultRepository, EncryptionService encryptionService) {
+    @Autowired
+    private final CandidateService candidateService;
+
+    public ResultService(ResultRepository resultRepository, EncryptionService encryptionService, CandidateService candidateService) {
         this.resultRepository = resultRepository;
         this.encryptionService = encryptionService;
+        this.candidateService = candidateService;
     }
 
     public void addVote(Integer candidateId, Integer electionId, String encryptedVote) {
@@ -51,14 +56,14 @@ public class ResultService {
         resultRepository.save(result);
     }
 
-    public Map<Integer, Long> getElectionResults(Integer electionId) {
+    public Map<Candidate, Long> getElectionResults(Integer electionId) {
         List<Result> results = resultRepository.findAllByElectionId(electionId);
-        Map<Integer, Long> tallyMap = new HashMap<>();
+        Map<Candidate, Long> tallyMap = new HashMap<>();
 
         for (Result result : results) {
             EncryptedNumber encryptedNumber = encryptionService.encryptedTextToEncryptedNumber(result.getEncryptedTally());
             long decryptedTally = encryptionService.decrypt(encryptedNumber);
-            tallyMap.put(result.getCandidateId(), decryptedTally);
+            tallyMap.put(candidateService.findCandidateById(result.getCandidateId()), decryptedTally);
         }
 
         return tallyMap;

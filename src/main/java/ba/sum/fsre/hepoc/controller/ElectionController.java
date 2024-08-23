@@ -1,5 +1,6 @@
 package ba.sum.fsre.hepoc.controller;
 
+import ba.sum.fsre.hepoc.entity.Candidate;
 import ba.sum.fsre.hepoc.entity.Citizen;
 import ba.sum.fsre.hepoc.entity.Election;
 import ba.sum.fsre.hepoc.service.CitizenService;
@@ -68,7 +69,7 @@ public class ElectionController {
                 .orElseThrow(() -> new UsernameNotFoundException("Citizen not found with JMBG: " + jmbg));
         model.addAttribute("citizen", citizen);
 
-        Map<Integer, Long> results = resultService.getElectionResults(id);
+        Map<Candidate, Long> results = resultService.getElectionResults(id);
         model.addAttribute("results", results);
         model.addAttribute("electionId", id);
 

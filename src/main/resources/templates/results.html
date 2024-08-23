@@ -45,8 +45,8 @@
     <div class="card-body">
       <h5 class="card-title">Results for Election ID: <span th:text="${electionId}"></span></h5>
       <ul class="list-group">
-        <li class="list-group-item" th:each="entry : ${results}">
-          <span th:text="'Candidate ID: ' + ${entry.key} + ' - Votes: ' + ${entry.value}"></span>
+        <li class="list-group-item mb-3" th:each="entry : ${results}">
+          <span th:text="'Candidate name: ' + ${entry.key.getFullName()} + '  -   Number of Votes: ' + ${entry.value}"></span>
         </li>
       </ul>
     </div>

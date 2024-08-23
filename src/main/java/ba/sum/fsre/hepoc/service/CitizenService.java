@@ -5,6 +5,7 @@ import ba.sum.fsre.hepoc.repository.CitizenRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,5 +30,9 @@ public class CitizenService {
 
     public Optional<Citizen> findByJmbg(String jmbg) {
         return citizenRepository.findByJmbg(jmbg);
+    }
+
+    public List<Citizen> findAll() {
+        return citizenRepository.findAll();
     }
 }

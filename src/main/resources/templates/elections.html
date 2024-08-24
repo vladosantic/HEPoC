@@ -54,6 +54,7 @@
                         <p class="card-text">To: <span th:text="${#dates.format(election.endDate, 'dd/MM/yyyy')}"></span></p>
 
                         <a th:if="${!citizen.hasVoted}" th:href="@{/voting/{id}(id=${election.id})}" class="btn btn-primary">Vote Now</a>
+                        <a th:if="${citizen.hasVoted}" th:href="@{/election/results/{id} (id=${election.id})}" class="btn btn-primary">Show Results</a>
                     </div>
                 </div>
             </div>

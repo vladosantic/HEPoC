@@ -35,4 +35,12 @@ public class CitizenService {
     public List<Citizen> findAll() {
         return citizenRepository.findAll();
     }
+
+    public Citizen findById(Integer id) {
+        return citizenRepository.findById(id).orElse(null);
+    }
+
+    public void deleteById(Integer id) {
+        citizenRepository.deleteById(id);
+    }
 }

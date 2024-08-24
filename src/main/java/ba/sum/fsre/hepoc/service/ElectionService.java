@@ -24,4 +24,12 @@ public class ElectionService {
     public Election getElectionById(Integer id) {
         return electionRepository.findById(id).orElse(null);
     }
+
+    public void save(Election election) {
+        electionRepository.save(election);
+    }
+
+    public void deleteById(Integer id) {
+        electionRepository.deleteById(id);
+    }
 }

@@ -28,4 +28,12 @@ public class CandidateService {
     public List<Candidate> findAll () {
         return candidateRepository.findAll();
     }
+
+    public void save (Candidate candidate) {
+        candidateRepository.save(candidate);
+    }
+
+    public void deleteById(Integer id) {
+        candidateRepository.deleteById(id);
+    }
 }

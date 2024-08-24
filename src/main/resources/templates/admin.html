@@ -7,7 +7,10 @@
 <body>
 <div class="container my-4">
   <h1>Admin Panel</h1>
-  <ul class="nav nav-tabs" id="adminTab" role="tablist">
+  <div th:if="${errorMessage != null}" class="lc-block col-lg-6 mx-auto mb-4">
+    <div class="alert alert-danger" th:text="${errorMessage}"></div>
+  </div>
+  <ul class="nav nav-tabs mb-2" id="adminTab" role="tablist">
     <li class="nav-item" role="presentation">
       <button class="nav-link active" id="candidates-tab" data-bs-toggle="tab" data-bs-target="#candidates" type="button" role="tab">Candidates</button>
     </li>
@@ -19,7 +22,10 @@
     </li>
   </ul>
   <div class="tab-content" id="adminTabContent">
-    <div class="tab-pane fade show active" id="candidates" role="tabpanel">
+    <div class="tab-pane fade show active mb-1" id="candidates" role="tabpanel">
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCandidateModal">
+        Add New Candidate
+      </button>
       <table class="table mt-3">
         <thead>
         <tr>
@@ -39,9 +45,11 @@
           <td th:text="${candidate.party}"></td>
           <td th:text="${candidate.election.getName()}"></td>
           <td>
-            <form th:action="@{/admin/edit/candidate}" method="post" class="d-inline-block">
-              <button type="submit" class="btn btn-primary">Edit</button>
-            </form>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    th:data-bs-target="'#editCandidateModal' + ${candidate.id}">
+              Edit
+            </button>
+
             <form th:action="@{/admin/delete/candidate/{id}(id=${candidate.id})}" method="post" class="d-inline-block">
               <button type="submit" class="btn btn-danger">Delete</button>
             </form>
@@ -49,9 +57,95 @@
         </tr>
         </tbody>
       </table>
+
+      <div th:each="candidate : ${candidates}">
+        <div class="modal fade" th:id="'editCandidateModal' + ${candidate.id}" tabindex="-1"
+             aria-labelledby="editCandidateModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="editCandidateModalLabel">Edit Candidate</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form th:action="@{/admin/edit/candidate}" method="post">
+                  <input type="hidden" name="id" th:value="${candidate.id}">
+                  <div class="mb-3">
+                    <label for="candidateName" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="candidateName" name="name"
+                           th:value="${candidate.name}">
+                  </div>
+                  <div class="mb-3">
+                    <label for="candidateLastName" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="candidateLastName" name="lastName"
+                           th:value="${candidate.lastName}">
+                  </div>
+                  <div class="mb-3">
+                    <label for="candidateParty" class="form-label">Party</label>
+                    <input type="text" class="form-control" id="candidateParty" name="party"
+                           th:value="${candidate.party}">
+                  </div>
+                  <div class="mb-3">
+                    <label for="candidateElection" class="form-label">Election</label>
+                    <select class="form-select" id="candidateElection" name="electionId">
+                      <option th:each="election : ${elections}"
+                              th:value="${election.id}"
+                              th:text="${election.name}"
+                              th:selected="${election.id == candidate.election.id}">
+                      </option>
+                    </select>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Save changes</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="addCandidateModal" tabindex="-1" aria-labelledby="addCandidateModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addCandidateModalLabel">Add New Candidate</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form th:action="@{/admin/add/candidate}" method="post">
+                <div class="mb-3">
+                  <label for="newCandidateName" class="form-label">Name</label>
+                  <input type="text" class="form-control" id="newCandidateName" name="name" required>
+                </div>
+                <div class="mb-3">
+                  <label for="newCandidateLastName" class="form-label">Last Name</label>
+                  <input type="text" class="form-control" id="newCandidateLastName" name="lastName" required>
+                </div>
+                <div class="mb-3">
+                  <label for="newCandidateParty" class="form-label">Party</label>
+                  <input type="text" class="form-control" id="newCandidateParty" name="party" required>
+                </div>
+                <div class="mb-3">
+                  <label for="newCandidateEmail" class="form-label">Email</label>
+                  <input type="text" class="form-control" id="newCandidateEmail" name="email" required>
+                </div>
+                <div class="mb-3">
+                  <label for="newCandidateElection" class="form-label">Election</label>
+                  <select class="form-select" id="newCandidateElection" name="electionId" required>
+                    <option th:each="election : ${elections}" th:value="${election.id}" th:text="${election.name}"></option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Candidate</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="tab-pane fade" id="elections" role="tabpanel">
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addElectionModal">
+        Add New Election
+      </button>
       <table class="table mt-3">
         <thead>
         <tr>
@@ -69,9 +163,10 @@
           <td th:text="${#dates.format(election.startDate, 'yyyy-MM-dd')}"></td>
           <td th:text="${#dates.format(election.endDate, 'yyyy-MM-dd')}"></td>
           <td>
-            <form th:action="@{/admin/edit/election}" method="post" class="d-inline-block">
-              <button type="submit" class="btn btn-primary">Edit</button>
-            </form>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    th:data-bs-target="'#editElectionModal' + ${election.id}">
+              Edit
+            </button>
             <form th:action="@{/admin/delete/election/{id}(id=${election.id})}" method="post" class="d-inline-block">
               <button type="submit" class="btn btn-danger">Delete</button>
             </form>
@@ -79,9 +174,75 @@
         </tr>
         </tbody>
       </table>
+
+      <div th:each="election : ${elections}">
+        <div class="modal fade" th:id="'editElectionModal' + ${election.id}" tabindex="-1"
+             aria-labelledby="editElectionModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="editElectionModalLabel">Edit Election</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form th:action="@{/admin/edit/election}" method="post">
+                  <input type="hidden" name="id" th:value="${election.id}">
+                  <div class="mb-3">
+                    <label for="electionName" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="electionName" name="name"
+                           th:value="${election.name}">
+                  </div>
+                  <div class="mb-3">
+                    <label for="electionStartDate" class="form-label">Start Date</label>
+                    <input type="date" class="form-control" id="electionStartDate" name="startDate"
+                           th:value="${#dates.format(election.startDate, 'yyyy-MM-dd')}">
+                  </div>
+                  <div class="mb-3">
+                    <label for="electionEndDate" class="form-label">End Date</label>
+                    <input type="date" class="form-control" id="electionEndDate" name="endDate"
+                           th:value="${#dates.format(election.endDate, 'yyyy-MM-dd')}">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Save changes</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="addElectionModal" tabindex="-1" aria-labelledby="addElectionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addElectionModalLabel">Add New Election</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form th:action="@{/admin/add/election}" method="post">
+                <div class="mb-3">
+                  <label for="newElectionName" class="form-label">Name</label>
+                  <input type="text" class="form-control" id="newElectionName" name="name" required>
+                </div>
+                <div class="mb-3">
+                  <label for="newElectionStartDate" class="form-label">Start Date</label>
+                  <input type="date" class="form-control" id="newElectionStartDate" name="startDate" required>
+                </div>
+                <div class="mb-3">
+                  <label for="newElectionEndDate" class="form-label">End Date</label>
+                  <input type="date" class="form-control" id="newElectionEndDate" name="endDate" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Election</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="tab-pane fade" id="citizens" role="tabpanel">
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCitizenModal">
+        Add New Citizen
+      </button>
       <table class="table mt-3">
         <thead>
         <tr>
@@ -107,9 +268,10 @@
           <td th:text="${citizen.address}"></td>
           <td th:text="${citizen.city}"></td>
           <td>
-            <form th:action="@{/admin/edit/citizen}" method="post" class="d-inline-block">
-              <button type="submit" class="btn btn-primary">Edit</button>
-            </form>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    th:data-bs-target="'#editCitizenModal' + ${citizen.id}">
+              Edit
+            </button>
             <form th:action="@{/admin/delete/citizen/{id}(id=${citizen.id})}" method="post" class="d-inline-block">
               <button type="submit" class="btn btn-danger">Delete</button>
             </form>
@@ -117,6 +279,113 @@
         </tr>
         </tbody>
       </table>
+
+      <div th:each="citizen : ${citizens}">
+        <div class="modal fade" th:id="'editCitizenModal' + ${citizen.id}" tabindex="-1"
+             aria-labelledby="editCitizenModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="editCitizenModalLabel">Edit Citizen</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form th:action="@{/admin/edit/citizen}" method="post">
+                  <input type="hidden" name="id" th:value="${citizen.id}">
+                  <div class="mb-3">
+                    <label for="citizenFirstName" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="citizenFirstName" name="firstName"
+                           th:value="${citizen.firstName}">
+                  </div>
+                  <div class="mb-3">
+                    <label for="citizenLastName" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="citizenLastName" name="lastName"
+                           th:value="${citizen.lastName}">
+                  </div>
+                  <div class="mb-3">
+                    <label for="citizenJmbg" class="form-label">JMBG</label>
+                    <input type="text" class="form-control" id="citizenJmbg" name="jmbg"
+                           th:value="${citizen.jmbg}">
+                  </div>
+                  <div class="mb-3">
+                    <label for="citizenPhoneNumber" class="form-label">Phone Number</label>
+                    <input type="text" class="form-control" id="citizenPhoneNumber" name="phoneNumber"
+                           th:value="${citizen.phoneNumber}">
+                  </div>
+                  <div class="mb-3">
+                    <label for="citizenEmail" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="citizenEmail" name="email"
+                           th:value="${citizen.email}">
+                  </div>
+                  <div class="mb-3">
+                    <label for="citizenAddress" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="citizenAddress" name="address"
+                           th:value="${citizen.address}">
+                  </div>
+                  <div class="mb-3">
+                    <label for="citizenCity" class="form-label">City</label>
+                    <input type="text" class="form-control" id="citizenCity" name="city"
+                           th:value="${citizen.city}">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Save changes</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="addCitizenModal" tabindex="-1" aria-labelledby="addCitizenModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addCitizenModalLabel">Add New Citizen</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form th:action="@{/admin/add/citizen}" method="post">
+                <div class="mb-3">
+                  <label for="firstName" class="form-label">First Name</label>
+                  <input type="text" class="form-control" id="firstName" name="firstName" required>
+                </div>
+                <div class="mb-3">
+                  <label for="lastName" class="form-label">Last Name</label>
+                  <input type="text" class="form-control" id="lastName" name="lastName" required>
+                </div>
+                <div class="mb-3">
+                  <label for="jmbg" class="form-label">JMBG</label>
+                  <input type="text" class="form-control" id="jmbg" name="jmbg" required>
+                </div>
+                <div class="mb-3">
+                  <label for="password" class="form-label">Password</label>
+                  <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <div class="mb-3">
+                  <label for="email" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="mb-3">
+                  <label for="phoneNumber" class="form-label">Phone Number</label>
+                  <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
+                </div>
+                <div class="mb-3">
+                  <label for="address" class="form-label">Address</label>
+                  <input type="text" class="form-control" id="address" name="address" required>
+                </div>
+                <div class="mb-3">
+                  <label for="city" class="form-label">City</label>
+                  <input type="text" class="form-control" id="city" name="city" required>
+                </div>
+                <div class="mb-3">
+                  <label for="dateOfBirth" class="form-label">Date of Birth</label>
+                  <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Citizen</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

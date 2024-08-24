@@ -1,10 +1,12 @@
 package ba.sum.fsre.hepoc.service;
 
 import ba.sum.fsre.hepoc.entity.Citizen;
+import ba.sum.fsre.hepoc.entity.Role;
 import ba.sum.fsre.hepoc.repository.CitizenRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,11 +14,12 @@ import java.util.Optional;
 public class CitizenService {
     private final CitizenRepository citizenRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleService roleService;
 
-
-    public CitizenService(CitizenRepository citizenRepository, PasswordEncoder passwordEncoder) {
+    public CitizenService(CitizenRepository citizenRepository, PasswordEncoder passwordEncoder, RoleService roleService) {
         this.citizenRepository = citizenRepository;
         this.passwordEncoder = passwordEncoder;
+        this.roleService = roleService;
     }
 
     public void save(Citizen citizen) {
@@ -24,6 +27,11 @@ public class CitizenService {
     }
 
     public void register (Citizen citizen) {
+        Role citizenRole = roleService.findRoleByName("CITIZEN");
+        if (citizenRole != null) {
+            citizen.setRoles((Arrays.asList(citizenRole)));
+        }
+
         citizen.setPassword(passwordEncoder.encode(citizen.getPassword()));
         citizenRepository.save(citizen);
     }

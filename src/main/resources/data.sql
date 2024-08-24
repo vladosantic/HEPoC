@@ -56,4 +56,10 @@ WHERE NOT EXISTS (
       AND c.election_id = election_data.election_id
 );
 
+INSERT INTO roles (name)
+SELECT 'ROLE_ADMIN'
+    WHERE NOT EXISTS (SELECT 1 FROM roles WHERE name = 'ROLE_ADMIN');
 
+INSERT INTO roles (name)
+SELECT 'ROLE_CITIZEN'
+    WHERE NOT EXISTS (SELECT 1 FROM roles WHERE name = 'ROLE_CITIZEN');

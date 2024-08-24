@@ -10,6 +10,13 @@
         <div class="col-md-8">
             <div class="card shadow-sm">
                 <div class="card-body">
+                    <div th:if="${successMessage != null}" class="lc-block col-lg-6 mx-auto mb-4">
+                        <div class="alert alert-success" th:text="${message}"></div>
+                    </div>
+
+                    <div th:if="${errorMessage != null}" class="lc-block col-lg-6 mx-auto mb-4">
+                        <div class="alert alert-danger" th:text="${errorMessage}"></div>
+                    </div>
                     <h2 class="card-title text-center mb-4">Register</h2>
                     <form th:action="@{/register}" th:object="${citizen}" method="post">
                         <div class="row">
@@ -32,7 +39,7 @@
                                 <div class="form-group mb-3">
                                     <label for="jmbg" class="form-label">JMBG</label>
                                     <input type="text" class="form-control" id="jmbg" th:field="*{jmbg}" placeholder="Enter JMBG"
-                                           pattern="\d*" title="JMBG must be a 14-digit number." maxlength="14" minlength="14"
+                                           pattern="\d*" title="JMBG must be a 13-digit number." maxlength="13" minlength="13"
                                            required>
                                 </div>
                             </div>

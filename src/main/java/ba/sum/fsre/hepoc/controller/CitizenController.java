@@ -57,8 +57,15 @@ public class CitizenController {
     }
 
     @PostMapping("/register")
-    public String processRegistration(@ModelAttribute Citizen citizen) {
-        citizenService.register(citizen);
-        return "redirect:/login";
+    public String processRegistration(@ModelAttribute Citizen citizen,
+                                      Model model) {
+        if (citizenService.citizenExistsByJmbg(citizen.getJmbg())) {
+            model.addAttribute("errorMessage", "Citizen with inputted JMBG already exists");
+            return "register";
+        } else {
+            citizenService.register(citizen);
+            model.addAttribute("successMessage", "Citizen successfully registered");
+            return "login";
+        }
     }
 }

@@ -43,4 +43,8 @@ public class CitizenService {
     public void deleteById(Integer id) {
         citizenRepository.deleteById(id);
     }
+
+    public boolean citizenExistsByJmbg (String jmbg) {
+        return citizenRepository.findByJmbg(jmbg).isPresent();
+    }
 }

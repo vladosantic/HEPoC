@@ -25,12 +25,16 @@ public class SpringSecurity {
         return new BCryptPasswordEncoder();
     }
 
+    @Autowired
+    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests((authorize) ->
                         authorize.requestMatchers("/register").permitAll()
                                 .requestMatchers("/index").permitAll()
+                                .requestMatchers("/login").permitAll()
                                 .requestMatchers("/images/**").permitAll()
                                 .requestMatchers("/css/**").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
@@ -39,7 +43,7 @@ public class SpringSecurity {
                         form -> form
                                 .loginPage("/login")
                                 .loginProcessingUrl("/login")
-                                .defaultSuccessUrl("/index", true)
+                                .successHandler(customAuthenticationSuccessHandler)
                                 .permitAll()
                 ).logout(
                         logout -> logout

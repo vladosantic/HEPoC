@@ -40,6 +40,14 @@ public class CitizenService {
         return citizenRepository.findByJmbg(jmbg);
     }
 
+    public boolean citizenExistsByJmbgAndPassword(String jmbg, String password) {
+        Optional<Citizen> citizen = citizenRepository.findByJmbg(jmbg);
+        if (citizen != null) {
+            return passwordEncoder.matches(password, citizen.get().getPassword());
+        }
+        return false;
+    }
+
     public List<Citizen> findAll() {
         return citizenRepository.findAll();
     }

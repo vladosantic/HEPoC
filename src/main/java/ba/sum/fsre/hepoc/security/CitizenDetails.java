@@ -41,4 +41,8 @@ public class CitizenDetails implements UserDetails {
     public String getUsername() {
         return citizen.getJmbg();
     }
+
+    public boolean isTwoFactorEnabled() {
+        return true;
+    }
 }

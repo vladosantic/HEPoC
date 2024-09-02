@@ -78,7 +78,11 @@
             <artifactId>javallier_2.10</artifactId>
             <version>0.6.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+            <version>3.3.2</version>
+        </dependency>
     </dependencies>
 
     <build>

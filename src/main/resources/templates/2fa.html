@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Two Factor Authentication</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+</head>
+<body class="bg-light d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-5 col-lg-4">
+            <div class="text-center mb-4">
+                <h2>Two Factor Authentication</h2>
+            </div>
+            <form action="#" th:action="@{/2fa}" method="post">
+                <input type="hidden" name="jmbg" th:value="${jmbg}" />
+                <div class="form-group">
+                    <label for="code">Enter 2FA Code:</label>
+                    <input type="text" id="code" name="code" class="form-control" required />
+                </div>
+                <button type="submit" class="mt-2 btn btn-primary btn-block">Verify</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
